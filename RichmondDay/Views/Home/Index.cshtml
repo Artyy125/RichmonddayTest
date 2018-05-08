@@ -1,0 +1,16 @@
+﻿@model IEnumerable<RichmondDay.Models.RichmonddayInfoModel>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Info";
+}
+
+<h2>Richmondday Employee Information</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@Html.Partial("~/Views/Partials/_Info.cshtml",Model)
+
+
