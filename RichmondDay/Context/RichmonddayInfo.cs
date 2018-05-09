@@ -6,7 +6,7 @@ namespace RichmondDay.Context
     [Table("RichmonddayInfo")]
     public class RichmonddayInfo
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [StringLength(50)]

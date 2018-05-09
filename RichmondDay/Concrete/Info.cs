@@ -1,9 +1,11 @@
-﻿using RichmondDay.Context;
+﻿using Elmah;
+using RichmondDay.Context;
 using RichmondDay.Interface;
 using RichmondDay.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace RichmondDay.Concrete
@@ -12,7 +14,6 @@ namespace RichmondDay.Concrete
     {
         enum Output
         {
-            Succeeded,
             Deleted
         }
         private IRichmonddayDbContext _db;
@@ -51,16 +52,24 @@ namespace RichmondDay.Concrete
                 throw;
             }
         }
-        public string Save()
+        public Task<int> Save(RichmonddayInfoModel data)
         {
             try
             {
-                return Output.Succeeded.ToString();
+                RichmonddayInfo info = new RichmonddayInfo
+                {
+                    FirstName = data.FirstName,
+                    LastName = data.LastName,
+                    Email = data.Email
+                };
+                _db.RichmonddayInfoes.Add(info);
+                _db.SaveChanges();
+                return Task.FromResult(info.Id);
             }
             catch (Exception ex)
             {
-
-                throw;
+                ErrorLog.GetDefault(null).Log(new Error(ex));
+                return Task.FromResult(0);
             }
         }
         public RichmonddayInfoModel Update()
@@ -75,11 +84,14 @@ namespace RichmondDay.Concrete
                 throw;
             }
         }
-        public string Delete()
+        public Task<string> Delete(int id)
         {
             try
             {
-                return Output.Deleted.ToString();
+                RichmonddayInfo info = _db.RichmonddayInfoes.Where(r => r.Id == id).FirstOrDefault();
+                _db.RichmonddayInfoes.Remove(info);
+                _db.SaveChanges();
+                return Task.FromResult(Output.Deleted.ToString());
             }
             catch (Exception ex)
             {

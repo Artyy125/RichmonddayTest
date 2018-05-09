@@ -1,6 +1,13 @@
 ﻿@model PagedList.IPagedList<RichmondDay.Models.RichmonddayInfoModel>
 @using PagedList.Mvc;
 
+<form id="frmSave" method="post">
+    <input type="text" id="FirstName" placeholder="First Name">
+    <input type="text" id="LastName" placeholder="Last Name">
+    <input type="text" id="Email" placeholder="Email Address">
+    <input type="button" id="btnSave" value="Save">
+</form>
+<br />
 <table class="table">
     <tr>
         <th>
@@ -41,4 +48,41 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort }))
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            var firstName = $("#FirstName").val();
+            var lastName = $("#LastName").val();
+            var email = $("#Email").val();
+            var data = {
+                'FirstName': firstName,
+                'LastName': lastName,
+                'Email': email,
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Home/Save",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function (recordId) {
+                    var markup = "<tr><td>" + firstName + "</td><td contenteditable='true'>" + lastName + "</td><td>" + email + "</td><td><a href=/Home/Edit/" + recordId + "> Edit</a> | <a href=/Home/Delete/" + recordId + ">Delete</a></td ><tr>";
+                    $("table tbody").append(markup);
+                },
+                error: function (result) {
+                    alert('error');
+                }
+            });
+        });
+
+        // Find and remove selected table rows
+        $(".delete-row").click(function(){
+            $("table tbody").find('input[name="record"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+    });
+</script>
 

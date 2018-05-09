@@ -10,9 +10,9 @@ namespace RichmondDay.Interface
     public interface IInfo
     {
         List<RichmonddayInfoModel> GetAllInfo(string sortOrder);
-        string Save();
+        Task<int> Save(RichmonddayInfoModel data);
         RichmonddayInfoModel Update();
-        string Delete();
+        Task<string> Delete(int id);
 
     }
 }

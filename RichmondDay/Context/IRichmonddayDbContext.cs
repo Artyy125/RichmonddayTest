@@ -10,5 +10,7 @@ namespace RichmondDay.Context
     public interface IRichmonddayDbContext
     {
         DbSet<RichmonddayInfo> RichmonddayInfoes { get; set; }
+        Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

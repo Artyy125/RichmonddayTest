@@ -4,6 +4,8 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using PagedList;
+using RichmondDay.Models;
+using System.Threading.Tasks;
 
 namespace RichmondDay.Controllers
 {
@@ -32,6 +34,33 @@ namespace RichmondDay.Controllers
                 throw;
             }
             
+        }
+        [HttpPost]
+        public async Task<ActionResult> Save(RichmonddayInfoModel data)
+        {
+            try
+            {
+                int recordId = await _info.Save(data);
+                return Json(recordId, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.GetDefault(null).Log(new Error(ex));
+                throw;
+            }
+        }
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                string result = await _info.Delete(id);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.GetDefault(null).Log(new Error(ex));
+                throw;
+            }
         }
     }
 }
