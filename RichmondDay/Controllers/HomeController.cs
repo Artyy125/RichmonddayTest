@@ -41,6 +41,7 @@ namespace RichmondDay.Controllers
         {
             ViewBag.PageNumber = pageNumber;
             ViewBag.CurrentSort = sortOrder;
+            string result = "";
             try
             {
                 switch (submitButton)
@@ -49,9 +50,10 @@ namespace RichmondDay.Controllers
                         int recordId = await _info.Save(data);
                         break;
                     case "Delete":
-                        string result = await _info.Delete(id);
+                        result = await _info.Delete(id);
                         break;
-                    case "Update":
+                    case "Edit":
+                        result = await _info.Update(data);
                         break;
                 }
                 var allInfo = _info.GetAllInfo(sortOrder);

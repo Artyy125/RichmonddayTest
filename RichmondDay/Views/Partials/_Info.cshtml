@@ -3,62 +3,91 @@
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<div id="divSave">
-    @using (Ajax.BeginForm("UpdateInfo", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSave" }))
+<div class="container">
+    <div id="divSave" class="row">
+
+        @using (Ajax.BeginForm("UpdateInfo", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSave" }))
     {
         @Html.AntiForgeryToken()
-        <input type="text" id="FirstName" name="FirstName" placeholder="First Name">
-        <input type="text" id="LastName" name="LastName" placeholder="Last Name">
-        <input type="text" id="Email" name="Email" placeholder="Email Address">
-        <input type="hidden" id="pageNumber" name="pageNumber" value=@ViewBag.pageNumber>
-        <input type="hidden" id="sortOrder" name="sortOrder" value=@ViewBag.CurrentSort>
-        <input type="submit" id="btnSave" name="SubmitButton" value="Save">
-        <table class="table">
-            <tr>
-                <th>
+        <div>
+            <div class="col-sm-3 input-group">
+                <input type="text" id="FirstName" class="form-control" name="FirstName" placeholder="First Name">
+            </div>
+            <div class="col-sm-3 input-group">
+                <input class="form-control" type="text" id="LastName" name="LastName" placeholder="Last Name">
+            </div>
+            <div class="col-sm-3 input-group">
+                <input type="text" id="Email" name="Email" class="form-control" placeholder="Email Address">
+            </div>
+            <div class="col-sm-3 form-group">
+                <input type="hidden" id="pageNumber" name="pageNumber" value=@ViewBag.pageNumber>
+                <input type="hidden" id="sortOrder" name="sortOrder" value=@ViewBag.CurrentSort>
+                <input type="submit" class="btn btn-primary" id="btnSave" name="SubmitButton" value="Save">
+            </div>
+        </div>
+           
+            <table class="table">
+                <tr>
+                    <th></th>
+                    <th>
+                        @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParam })
+                    </th>
+                    <th>
+                        @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParam })
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th></th>
+                </tr>
 
-                </th>
-                <th>
-                    @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParam })
-                </th>
-                <th>
-                    @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParam })
-                </th>
-                <th>
-                    Email
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
+                @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    <input type="hidden" id="@("D"+item.Id)" name="id" value="@item.Id" />
-                    <input type="hidden" name="pageNumber" value=@ViewBag.pageNumber>
-                    <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
-                    <input type="submit" id="@("E"+item.Id)" value="Edit">
-                    <input type="submit" id="@("D"+item.Id)" name="SubmitButton" value="Delete">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-            </tr>
+                <tr id="@item.Id">
+                    <td>
+                        <input type="hidden" name="id" value="@item.Id" />
+                    </td>
+                    <td id="@("LastName" + item.Id)">
+                        @Html.TextBoxFor(modelItem => item.LastName, new { @name = "LastName", @class = ("T" + item.Id + " form-control"), @disabled = "disabled" })
+                    </td>
+                    <td id="@("FirstName" + item.Id)">
+                        @Html.TextBoxFor(modelItem => item.FirstName, new { @name = "FirstName", @class = ("T" + item.Id + " form-control"), @disabled = "disabled" })
+                    </td>
+                    <td id="@("Email" + item.Id)">
+                        @Html.TextBoxFor(modelItem => item.Email, new { @name = "Email", @class = ("T" + item.Id + " form-control"), @disabled = "disabled" })
+                    </td>
+                    <td id="@("Val" + item.Id)">
+                        <input type="submit" id="@("E" + item.Id)" name="SubmitButton" value="Edit" class="btn btn-info">
+                        <input type="submit" name="SubmitButton" value="Delete" class="btn btn-danger">
+                        <input type="hidden" name="pageNumber" value=@ViewBag.pageNumber>
+                        <input type="hidden" name="sortOrder" value=@ViewBag.CurrentSort>
+                    </td>
+                </tr>
+        }
+
+            </table>
             }
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-        </table>
-    }
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-    @Html.PagedListPager(Model, page => Url.Action("Index",
-                                            new { page, sortOrder = ViewBag.CurrentSort }))
-</div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort }))
+        </div>
+    </div>
+<script>
+    $("input").click(function (e) {
+        var idClicked = e.target.id;
+        var param = $("#" + idClicked).attr("value");
+        var textboxId = idClicked.substring(1, idClicked.length);
+        textboxId = "T" + textboxId;
+        if (param == "Edit") {
+            $("." + textboxId).prop('disabled', false);
+            $("#" + idClicked).val('Update');
+        }
+        else {
+            $("." + textboxId).prop('disabled', true);
+            $("#" + idClicked).val('Edit');
+        }
+    });
+</script>
 
 
 

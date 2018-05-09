@@ -11,7 +11,7 @@ namespace RichmondDay.Interface
     {
         List<RichmonddayInfoModel> GetAllInfo(string sortOrder);
         Task<int> Save(RichmonddayInfoModel data);
-        RichmonddayInfoModel Update();
+        Task<string> Update(RichmonddayInfoModel data);
         Task<string> Delete(int id);
 
     }

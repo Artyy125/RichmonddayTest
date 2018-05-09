@@ -14,7 +14,9 @@ namespace RichmondDay.Concrete
     {
         enum Output
         {
-            Deleted
+            Deleted,
+            Updated,
+            Saved
         }
         private IRichmonddayDbContext _db;
         public Info(IRichmonddayDbContext db)
@@ -69,11 +71,19 @@ namespace RichmondDay.Concrete
                 return Task.FromResult(0);
             }
         }
-        public RichmonddayInfoModel Update()
+        public Task<string> Update(RichmonddayInfoModel data)
         {
             try
             {
-                return new RichmonddayInfoModel();
+                var result = _db.RichmonddayInfoes.Where(r => r.Id == data.Id).FirstOrDefault();
+                if (result != null)
+                {
+                    result.FirstName = data.FirstName;
+                    result.LastName = data.LastName;
+                    result.Email = data.Email;
+                    _db.SaveChanges();
+                }
+                return Task.FromResult(Output.Updated.ToString());
             }
             catch (Exception ex)
             {

@@ -4,10 +4,15 @@
 @{
     ViewBag.Title = "Info";
 }
+<div class="row">
+    <div class="navbar navbar-brand" style="color:blueviolet">
+        <h2>Richmondday Employee Information</h2>
+    </div>
+</div>
 
-<h2>Richmondday Employee Information</h2>
 
-
-@Html.Partial("~/Views/Partials/_Info.cshtml",Model)
+<div class="row">
+    @Html.Partial("~/Views/Partials/_Info.cshtml", Model)
+</div>
 
 
