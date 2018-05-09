@@ -21,10 +21,11 @@ namespace RichmondDay.Controllers
             try
             {
                 ViewBag.CurrentSort = sortOrder;
-                ViewBag.FirstNameSortParam = String.IsNullOrEmpty(sortOrder) ? "fDesc" : "";
-                ViewBag.LastNameSortParam = String.IsNullOrEmpty(sortOrder) ? "lDesc" : "";
+                ViewBag.FirstNameSortParam = String.IsNullOrEmpty(sortOrder) ? "fDesc" : null;
+                ViewBag.LastNameSortParam = String.IsNullOrEmpty(sortOrder) ? "lDesc" : null;
                 var allInfo = _info.GetAllInfo(sortOrder);
                 int pageNumber = (page ?? 1);
+                ViewBag.pageNumber = pageNumber;
                 return View(allInfo.ToPagedList(pageNumber, 10));  
             }
             catch (Exception ex)
@@ -36,25 +37,26 @@ namespace RichmondDay.Controllers
             
         }
         [HttpPost]
-        public async Task<ActionResult> Save(RichmonddayInfoModel data)
+        public async Task<ActionResult> UpdateInfo(string submitButton, string sortOrder="",int pageNumber = 1, int id=0, RichmonddayInfoModel data=null)
         {
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.CurrentSort = sortOrder;
             try
             {
-                int recordId = await _info.Save(data);
-                return Json(recordId, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                ErrorLog.GetDefault(null).Log(new Error(ex));
-                throw;
-            }
-        }
-        public async Task<ActionResult> Delete(int id)
-        {
-            try
-            {
-                string result = await _info.Delete(id);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                switch (submitButton)
+                {
+                    case "Save":
+                        int recordId = await _info.Save(data);
+                        break;
+                    case "Delete":
+                        string result = await _info.Delete(id);
+                        break;
+                    case "Update":
+                        break;
+                }
+                var allInfo = _info.GetAllInfo(sortOrder);
+                return PartialView("~/Views/Partials/_Info.cshtml", allInfo.ToPagedList(pageNumber, 10));
+
             }
             catch (Exception ex)
             {

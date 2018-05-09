@@ -40,9 +40,6 @@ namespace RichmondDay.Concrete
                     case "lDesc":
                         allInfo = allInfo.OrderBy(s => s.LastName).ToList();
                         break;
-                    default:
-                        allInfo = allInfo.OrderByDescending(s => s.LastName).ToList();
-                        break;
                 }
                 return allInfo;
             }
