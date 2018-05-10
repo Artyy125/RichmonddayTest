@@ -49,6 +49,10 @@ namespace RichmondDay.Controllers
                 {
                     int recordId = await _info.Save(data);
                 }
+                else
+                {
+                    // do business logic
+                }
                 var allInfo = _info.GetAllInfo(sortOrder);
                 return PartialView("~/Views/Partials/_SaveInfo.cshtml", allInfo.ToPagedList(pageNumber, 10));
 
@@ -66,12 +70,14 @@ namespace RichmondDay.Controllers
             ViewBag.CurrentSort = sortOrder;
             try
             {
-                //case "Delete":
-                //    result = await _info.Delete(id);
                 if (ModelState.IsValid)
                 {
                     string result = await _info.Update(data);
-                }     
+                }
+                else
+                {
+                    // do business logic
+                }
                 var allInfo = _info.GetAllInfo(sortOrder);
                 return PartialView("~/Views/Partials/_Info.cshtml", allInfo.ToPagedList(pageNumber, 10));
 
@@ -90,36 +96,31 @@ namespace RichmondDay.Controllers
             string result = "";
             try
             {
-                //case "Delete":
-                //    result = await _info.Delete(id);
                 if (ModelState.IsValid)
                 {
                     result = await _info.Delete(id);
+                }
+                else
+                {
+                    // do business logic
                 }
                 var allInfo = _info.GetAllInfo(sortOrder);
                 var html = PartialView("~/Views/Partials/_Info.cshtml").RenderToString(allInfo.ToPagedList(pageNumber, 10));
                 if (Request.IsAjaxRequest())
                 {
-                    return Json(new { error = true, message = html });
+                    return Json(new { message = html });
                 }
-                return null; //PartialView("~/Views/Partials/_Info.cshtml", allInfo.ToPagedList(pageNumber, 10));
+                else
+                {
+                    return Json(new {error = "it's not an ajax call", message = html });
+                }
+                
 
             }
             catch (Exception ex)
             {
                 ErrorLog.GetDefault(null).Log(new Error(ex));
                 throw;
-            }
-        }
-        private string ConvertViewToString(string viewName, object model)
-        {
-            ViewData.Model = model;
-            using (StringWriter writer = new StringWriter())
-            {
-                ViewEngineResult vResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-                ViewContext vContext = new ViewContext(this.ControllerContext, vResult.View, ViewData, new TempDataDictionary(), writer);
-                vResult.View.Render(vContext, writer);
-                return writer.ToString();
             }
         }
     }
