@@ -1,0 +1,27 @@
+﻿<div id="divSave" class="row">
+    @using (Ajax.BeginForm("SaveInfo", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divSave" }))
+    {
+        @Html.AntiForgeryToken()
+    <div>
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <label hidden="hidden" id="lblinfo"></label>
+    </div>
+        
+        <div class="col-lg-pull-1">
+            <div class="col-sm-3 input-group">
+                <input type="text" id="FirstName" class="form-control" name="FirstName" placeholder="First Name">
+            </div>
+            <div class="col-sm-3 input-group">
+                <input class="form-control" type="text" id="LastName" name="LastName" placeholder="Last Name">
+            </div>
+            <div class="col-sm-3 input-group">
+                <input type="text" id="Email" name="Email" class="form-control" placeholder="Email Address">
+            </div>
+            <div class="col-sm-3 form-group">
+                <input type="hidden" id="pageNumber" name="pageNumber" value=@ViewBag.pageNumber>
+                <input type="hidden" id="sortOrder" name="sortOrder" value=@ViewBag.CurrentSort>
+                <input type="submit" class="btn btn-primary" id="btnSave" name="saveInfo" value="Save">
+            </div>
+        </div>
+    }
+</div>

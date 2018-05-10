@@ -47,7 +47,7 @@ namespace RichmondDay.Concrete
             }
             catch (Exception ex)
             {
-
+                ErrorLog.GetDefault(null).Log(new Error(ex));
                 throw;
             }
         }
@@ -87,7 +87,7 @@ namespace RichmondDay.Concrete
             }
             catch (Exception ex)
             {
-
+                ErrorLog.GetDefault(null).Log(new Error(ex));
                 throw;
             }
         }
@@ -102,7 +102,7 @@ namespace RichmondDay.Concrete
             }
             catch (Exception ex)
             {
-
+                ErrorLog.GetDefault(null).Log(new Error(ex));
                 throw;
             }
         }
