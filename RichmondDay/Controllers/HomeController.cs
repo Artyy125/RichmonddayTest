@@ -89,7 +89,7 @@ namespace RichmondDay.Controllers
             }
         }
         [HttpPost]
-        public async Task<JsonResult> DeleteInfo(int id,string sortOrder = "", int pageNumber = 1)
+        public async Task<ActionResult> DeleteInfo(int id,string sortOrder = "", int pageNumber = 1)
         {
             ViewBag.PageNumber = pageNumber;
             ViewBag.CurrentSort = sortOrder;
@@ -106,6 +106,7 @@ namespace RichmondDay.Controllers
                 }
                 var allInfo = _info.GetAllInfo(sortOrder);
                 var html = PartialView("~/Views/Partials/_Info.cshtml").RenderToString(allInfo.ToPagedList(pageNumber, 10));
+                return PartialView("~/Views/Partials/_Info.cshtml", allInfo.ToPagedList(pageNumber, 10));
                 if (Request.IsAjaxRequest())
                 {
                     return Json(new { message = html });

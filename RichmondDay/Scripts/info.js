@@ -48,12 +48,14 @@
             $.ajax({
         type: "POST",
                 url: '/Home/DeleteInfo',
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(infoParams),
+                dataType: 'html',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                    id: infoId, sortOrder: $('#sortOrder').val(), pageNumber: $('#pageNumber').val()
+                },
                 success: function (result) {
-        $("#allInfo").empty();
-    $("#allInfo").html(result.message)
+                    $("#allInfo").empty();
+                    $("#allInfo").html(result)
                 },
 
                 error: function () {

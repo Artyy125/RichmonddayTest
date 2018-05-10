@@ -3,6 +3,7 @@
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/info.js"></script>
 <div class="row">
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     @Html.Partial("~/Views/Partials/_SaveInfo.cshtml")
@@ -43,7 +44,7 @@
     </table>
     <input type="hidden" id="pageNumber" value=@ViewBag.pageNumber>
     <input type="hidden" id="sortOrder" value=@ViewBag.CurrentSort>
-</div> 
+</div>
 <div class="row">
     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
